@@ -11,20 +11,16 @@ install:
 script:
   - "docker run -ti --rm quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} -h | grep 'usage: statsite'"
 
-before_deploy:
+after_success:
   - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
-
-deploy:
-  - provider: script
-    script: ".travis/deploy.sh"
-    on:
-      repo: azavea/docker-statsite
-      branch: develop
-  - provider: script
-    script: ".travis/deploy.sh"
-    on:
-      repo: azavea/docker-statsite
-      tags: true
+  - if [ "${TRAVIS_BRANCH}" == "develop" ]; then
+    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7};
+    docker tag quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:latest;
+    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:latest;
+    fi
+  - if [ -n "${TRAVIS_TAG}" ]; then
+    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_TAG};
+    fi
 
 notifications:
   slack:
