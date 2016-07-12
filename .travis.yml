@@ -19,9 +19,6 @@ after_success:
     docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:latest;
     fi
   - if [ -n "${TRAVIS_TAG}" ]; then
+    docker tag quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_TAG};
     docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_TAG};
     fi
-
-notifications:
-  slack:
-    secure: KMEMZYOpkQ4t6eDnZymE6w3J1OiO/nKZbWy1Eb1OPnRVtc9Yv754a+zs0XZ/FHqC8hclW9K3mamKZKt/c47ACP/Z58uVo1WYo2DYAn4fSQi55hMVBrzTo6sQReu3E+QrFJys3RLFrKw5xH/bNvagRwRtM44yMLFdgWN1jhip2KqObKUDo9+GApWQudkyLH2vw57kvu9nvxgV1Ai+M87TkBU4GnZLcIRUxaxW+XYgVGPfNBkD4vT6VOgz01U3L+KHTlveU64uczMbMY2wxmDVZWGCwHlFOPd8vhHStc1cFZyYzWtFB89FJ+tKx6c4a1m8eCGO9wAzWUTtt98s4siy7DeBueKoINkcZ1reoWf2TU5US7f2Ag6GrRTK8BUEMRlFIj3/e+MOTmViGaajliTpS5ZJDJyFLep4FlVhNhTnP/Pz0k3s9Lkp3zuRdALgT+YbHRW5AHhMmT6k36f6mD+87s3/xvZ0cz0ciCiMNFeNeR/bHj7IfxguXhm13KtiPai4TspGCZpDqaZ2mO3fd3sGrR5Y54j05CRKPL1r5Q3dbfJ+zndKk1dpApbfcUZYcznnXDF7AdPah/H6+nxkd14ldE7YrCb5r3sOJRG0eF+tTfnfB2hsaAb9KMbi9peB+7RiWX0scWWF+Zy+qUylwoa5FeqjfcOflN7nFsTObtgRCng=
