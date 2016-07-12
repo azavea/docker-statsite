@@ -3,7 +3,7 @@
 [![Docker Repository on Quay.io](https://quay.io/repository/azavea/statsite/status "Docker Repository on Quay.io")](https://quay.io/repository/azavea/statsite)
 [![Apache V2 License](http://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/azavea/docker-statsite/blob/develop/LICENSE)
 
-A `Dockerfile` based off of [`python:2.7-slim`](https://registry.hub.docker.com/_/python/) that installs Statsite.
+A `Dockerfile` based off of [`alpine`](https://hub.docker.com/_/alpine/) that installs Statsite.
 
 ## Usage
 
