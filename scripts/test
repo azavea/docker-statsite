@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+if [[ -n "${CI}" ]]; then
+    set -x
+fi
+
+set -u
+
+function usage() {
+    echo -n \
+"Usage: $(basename "$0")
+Test container images built from templates.
+"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    if [ "${1:-}" = "--help" ]; then
+        usage
+    else
+        STATSITE_MAJOR_VERSION="${STATSITE_VERSION:0:3}"
+
+        docker run --rm -it \
+         "quay.io/azavea/statsite:${STATSITE_MAJOR_VERSION}-${VARIANT}" -h \
+         | grep "usage: statsite"
+    fi
+fi

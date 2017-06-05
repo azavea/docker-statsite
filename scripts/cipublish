@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+set -u
+
+function usage() {
+    echo -n \
+"Usage: $(basename "$0")
+Publish container images built from templates.
+"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    if [ "${1:-}" = "--help" ]; then
+        usage
+    else
+    	STATSITE_MAJOR_VERSION="${STATSITE_VERSION:0:3}"
+        docker \
+            login -u "${QUAY_USER}" -p "${QUAY_PASSWORD}" quay.io;
+
+        docker \
+            push "quay.io/azavea/statsite:${STATSITE_MAJOR_VERSION}-${VARIANT}";
+    fi
+fi

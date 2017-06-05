@@ -1,24 +1,17 @@
 sudo: required
 
 language: bash
+services: docker
 
-services:
-  - docker
-
-install:
-  - docker build -t quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} .
+env:
+  - STATSITE_VERSION=0.8.0 VARIANT=alpine
 
 script:
-  - "docker run -ti --rm quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} -h | grep 'usage: statsite'"
+  - ./scripts/cibuild
 
-after_success:
-  - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
-  - if [ "${TRAVIS_BRANCH}" == "develop" ]; then
-    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7};
-    docker tag quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:latest;
-    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:latest;
-    fi
-  - if [ -n "${TRAVIS_TAG}" ]; then
-    docker tag quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_COMMIT:0:7} quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_TAG};
-    docker push quay.io/${TRAVIS_REPO_SLUG:0:6}/${TRAVIS_REPO_SLUG:14}:${TRAVIS_TAG};
-    fi
+deploy:
+  - provider: script
+    script: "scripts/cipublish"
+    on:
+      repo: azavea/docker-statsite
+      branch: master
