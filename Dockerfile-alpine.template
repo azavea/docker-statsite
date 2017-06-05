@@ -1,8 +1,8 @@
-FROM alpine:3.4
+FROM python:2.7-alpine
 
 MAINTAINER Azavea <systems@azavea.com>
 
-ENV STATSITE_VERSION 0.8.0
+ENV STATSITE_VERSION %%STATSITE_VERSION%%
 ENV STATSITE_HOME /var/lib/statsite
 ENV STATSITE_SRC_DIR /usr/local/src
 ENV STATSITE_SBIN_DIR /usr/sbin
@@ -12,12 +12,13 @@ ENV STATSITE_SINK_DIR /usr/libexec/statsite
 RUN \
       addgroup -S statsite \
       && adduser -D -S -h ${STATSITE_HOME} -s /sbin/nologin -G statsite statsite \
-      && apk add --no-cache bash \
+      && apk add --no-cache \
+         bash \
+         ca-certificates \
       && ln -sf /bin/bash /bin/sh \
       && apk add --no-cache --virtual .build-deps \
          autoconf \
          automake \
-         ca-certificates \
          gcc \
          g++ \
          libtool \
